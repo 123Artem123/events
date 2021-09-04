@@ -1,0 +1,31 @@
+version: "3"
+services:
+  pg:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE} -q"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build: .
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_HOST: host.docker.internal
+      PORT: ${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on: 
+      pg:
+        condition: service_healthy  
+    volumes:
+      - ./log:/app/log
