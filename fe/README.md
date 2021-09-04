@@ -8,6 +8,12 @@ In the project directory, you can run:
 
 ### `yarn start`
 
+Please ensure you have .env file with following content before start
+
+````
+REACT_APP_API_URL=http://localhost:4000/events
+````
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
